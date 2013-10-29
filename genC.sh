@@ -14,6 +14,7 @@ else
     echo -n " * " >> $name
     date >> $name
     echo " */" >> $name
+    shift
     while [ $# -gt 0 ]
     do
 	echo "#include <$1>" >> $name
