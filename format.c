@@ -59,7 +59,18 @@ char* get_next_line(){
  */
 char* get_next_paragraph(){
 	char* c;
-	//TODO not implemented yet
+	int h;
+	char* line;
+	while ((h=getchar())!=EOF){
+	  ungetc(h, stdin);
+	  if (!is_empty_line()){
+	    line=get_next_line();
+	    while ((*c++ = *line++))
+	      ;
+	  }
+	  else
+	    break;
+	}
 	return c;
 }
 /*
@@ -106,6 +117,6 @@ char* format_paragraph(char* par,char mode, int width){
 int main(){
 	int b;
 	while((b=is_empty_line())!=EOF){
-		printf("%s",get_next_line());
+		printf("%s",get_next_paragraph());
 	}
 }
