@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define BUFFER_SIZE 1000
-#define PARAGRAPH_SIZE 100000
+#define PARAGRAPH_SIZE 10000
 /*
  *returns true if standard input is on an empty line, false otherwise
  */
@@ -61,20 +61,25 @@ char* get_next_line(){
  */
 char* get_next_paragraph(){
 	char *c;
+	int position=0;
+	char *paragraph;
+	int b;
 	int h;
 	char* line;
 	if ((c=(char *)malloc(sizeof(char)*PARAGRAPH_SIZE))==NULL) fprintf(stderr, "out of memory");
-	while ((h=getchar())!=EOF){
-	  ungetc(h, stdin);
-	  if (!is_empty_line()){
-	    line=get_next_line();
-	    while ((*c++ = *line++))
-	      ;
-	  }
-	  else
-	    break;
+	while ((b=is_empty_line())!=EOF&&!b){
+		line=get_next_line();
+		while (*line!=0){
+	      		c[position]=*line;
+			line++;
+			position++;
+		}
 	}
-	return c;
+	c[position]=0;
+	if((paragraph=(char*)malloc(sizeof(char)*(position+1)))==NULL)  fprintf(stderr, "out of memory");
+	strcpy(paragraph,c);
+	free(c);
+	return paragraph;
 }
 /*
  * returns a pointer to the next word
@@ -118,8 +123,5 @@ char* format_paragraph(char* par,char mode, int width){
         return c;
 }
 int main(){
-	int b;
-	while((b=is_empty_line())!=EOF){
-		printf("%s",get_next_paragraph());
-	}
+	printf("%s",get_next_paragraph());
 }
