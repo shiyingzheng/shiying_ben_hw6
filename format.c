@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define BUFFER_SIZE 1000
-#define PARAGRAPH_SIZE 100000
+#define PARAGRAPH_SIZE 1000
 /*
  *returns true if standard input is on an empty line, false otherwise
  */
@@ -74,6 +74,7 @@ char* get_next_paragraph(){
 	  else
 	    break;
 	}
+	//c=
 	return c;
 }
 /*
