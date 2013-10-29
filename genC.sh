@@ -9,8 +9,8 @@ else
     echo "/*" >> $name
     echo " * Program: $name" >> $name
     echo " * Usage:" >> $name
-    echo " *" >> $name
-    echo " * Author Shiying Zheng" >> $name
+    echo " * CS241 hw6" >> $name
+    echo " * Author Shiying Zheng and Ben Stern" >> $name
     echo -n " * " >> $name
     date >> $name
     echo " */" >> $name
