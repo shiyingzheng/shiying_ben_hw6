@@ -33,7 +33,7 @@ char* get_next_line(){
 	int c;
 	int position=0;
 	char* buffer;
-	if((buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char))==NULL) fprintf(stderr,"out of memory");
+	if((buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
         char* string;
 	while((c=getchar())!=EOF){
                 if(c=='\n'){
