@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define BUFFER_SIZE 1000
+#define PARAGRAPH_SIZE 100000
 /*
  *returns true if standard input is on an empty line, false otherwise
  */
@@ -59,9 +60,10 @@ char* get_next_line(){
  * Reads input from standard input and returns the next paragraph
  */
 char* get_next_paragraph(){
-	char* c;
+	char *c;
 	int h;
 	char* line;
+	if ((c=(char *)malloc(sizeof(char)*PARAGRAPH_SIZE))==NULL) fprintf(stderr, "out of memory");
 	while ((h=getchar())!=EOF){
 	  ungetc(h, stdin);
 	  if (!is_empty_line()){
