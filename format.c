@@ -32,13 +32,14 @@ int is_empty_line(){
 char* get_next_line(){
 	int c;
 	int position=0;
-	char* buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char));
+	char* buffer;
+	if((buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char))==NULL) fprintf(stderr,"out of memory");
         char* string;
 	while((c=getchar())!=EOF){
                 if(c=='\n'){
 			buffer[position++]=' ';
 			buffer[position]=0;
-			string=(char*)malloc((position+1)*sizeof(char));
+			if((string=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
 			strcpy(string, buffer);
 			free(buffer);
 			return string;
@@ -49,7 +50,7 @@ char* get_next_line(){
 		++position;
         }
         buffer[position]=0;
-        string=(char*)malloc((position+1)*sizeof(char));
+	if((string=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
         strcpy(string, buffer);
         free(buffer);
         return string;
