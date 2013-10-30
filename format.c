@@ -31,6 +31,7 @@ int is_empty_line(){
 
 /*
  * gets the next word in the line
+ * skips the next whitespaces
  */
 char* get_next_word(){
 	int c;
@@ -46,44 +47,58 @@ char* get_next_word(){
 	if((word=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
         strcpy(word, buffer);
         free(buffer);
+	//TODO skip whitespaces
         return word;
 }
 /*
  * gets the next line
- * ignores whitespaces in each line
  * returns a character array with words in the line and 
  * whitespace characters to signal word boundries
  * if it encounters EOF, it stops
  */
 char* get_next_line(){
 	int c;
+	int h;
 	int position=0;
 	char* buffer;
-	if((buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
         char* string;
+	char* current_word;
+	if((buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
+	if((current_word=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
 	//TODO rewrite!
 	//1.ask get_next_word for the next word and add to the current
 	//  buffer. put spaces between words and at end of line 
 	//2.handle weird spacing including more than one space between
 	//  words and space between the last word and the end of line.
-	while((c=getchar())!=EOF){
+	while((current_word=get_next_word())!=EOF){
                 if(c=='\n'){
 			buffer[position++]=' ';
 			buffer[position]=0;
 			if((string=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
 			strcpy(string, buffer);
 			free(buffer);
+//			free(current_word);
 			return string;
 		}
-                else{
-			buffer[position]=c;
-		}
+/*                else if ((h=getchar()!=' ')){
+			ungetc(h, stdin);
+			current_word=get_next_word();
+			while (*current_word!=0){
+				buffer[position]=*current_word;
+				current_word++;
+				position++;
+			}
+			buffer[position]=' ';
+//			printf("meow");
+//			free(current_word);
+		}*/
 		++position;
         }
         buffer[position]=0;
 	if((string=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
         strcpy(string, buffer);
         free(buffer);
+//	free(current_word);
         return string;
 }
 /*
@@ -158,14 +173,16 @@ void format_justified(char* par, int width){
  * The format functions should print the formatted paragraph.
  */
 void format_paragraph(char* par,char mode, int width){
-        if(mode='l') format_left_align(par,width);
-	else if(mode='r') format_right_align(par,width);
-	else if(mode='j') format_justified(par,width);
+        if(mode=='l') format_left_align(par,width);
+	else if(mode=='r') format_right_align(par,width);
+	else if(mode=='j') format_justified(par,width);
 }
 int main(){
 	//while(1){
-		printf("%s",get_next_line());
-		printf("%s",get_next_line());
-		printf("%s",get_next_line());
+//		printf("%s", get_next_paragraph());
 	//}
+
+	printf("%s ", get_next_word());
+	printf("%s ", get_next_word());
+	printf("%s ", get_next_word());
 }
