@@ -70,7 +70,7 @@ char* get_next_line(){
 	//  buffer. put spaces between words and at end of line 
 	//2.handle weird spacing including more than one space between
 	//  words and space between the last word and the end of line.
-	while((current_word=get_next_word())!=EOF){
+	while((c=getchar())!=EOF){
                 if(c=='\n'){
 			buffer[position++]=' ';
 			buffer[position]=0;
@@ -91,9 +91,9 @@ char* get_next_line(){
 			buffer[position]=' ';
 //			printf("meow");
 //			free(current_word);
-		}*/
+		}
 		++position;
-        }
+        }*/
         buffer[position]=0;
 	if((string=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
         strcpy(string, buffer);
@@ -179,10 +179,10 @@ void format_paragraph(char* par,char mode, int width){
 }
 int main(){
 	//while(1){
-//		printf("%s", get_next_paragraph());
+		printf("%s", get_next_paragraph());
 	//}
 
-	printf("%s ", get_next_word());
-	printf("%s ", get_next_word());
-	printf("%s ", get_next_word());
+//	printf("%s ", get_next_word());
+//	printf("%s ", get_next_word());
+//	printf("%s ", get_next_word());
 }
