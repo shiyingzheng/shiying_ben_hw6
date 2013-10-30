@@ -32,6 +32,7 @@ int is_empty_line(){
 /*
  * gets the next word in the line
  * skips the next whitespaces
+ * returns only a newline if it is called at the end of a line
  */
 char* get_next_word(){
 	int c;
@@ -43,11 +44,17 @@ char* get_next_word(){
 		buffer[position]=c;
 		++position;
 	}
+	if(c=='\n'&&position==0){
+                return "\n";
+        }
+	while(c==' '){
+               	c=getchar();
+       	}
+        ungetc(c,stdin);
 	buffer[position]=0;
 	if((word=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
         strcpy(word, buffer);
         free(buffer);
-	//TODO skip whitespaces
         return word;
 }
 /*
@@ -57,13 +64,30 @@ char* get_next_word(){
  * if it encounters EOF, it stops
  */
 char* get_next_line(){
+	char* buffer;//holds all the words so far
+	char* line;
+	char* word;	
+	if((buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
+	buffer[0]=0;
+	word=get_next_word();
+	while(strcmp(word,"\n")){
+		strcat(buffer,word);
+		strcat(buffer," ");
+		free(word);
+		word=get_next_word();
+	}
+	if((line=(char*)malloc((strlen(buffer))*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
+	strcpy(line,buffer);
+	free(buffer);
+	return line;
+}
+/*char* get_next_line(){
 	int c;
 	int h;
 	int position=0;
 	char* buffer;
         char* string;
 	char* current_word;
-	if((buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
 	if((current_word=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
 	//TODO rewrite!
 	//1.ask get_next_word for the next word and add to the current
@@ -80,7 +104,7 @@ char* get_next_line(){
 //			free(current_word);
 			return string;
 		}
-/*                else if ((h=getchar()!=' ')){
+		else if ((h=getchar()!=' ')){
 			ungetc(h, stdin);
 			current_word=get_next_word();
 			while (*current_word!=0){
@@ -93,14 +117,14 @@ char* get_next_line(){
 //			free(current_word);
 		}
 		++position;
-        }*/
+        }
         buffer[position]=0;
 	if((string=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
         strcpy(string, buffer);
         free(buffer);
 //	free(current_word);
         return string;
-}
+}*/
 /*
  * Reads input from standard input and returns the next paragraph
  */
@@ -178,11 +202,21 @@ void format_paragraph(char* par,char mode, int width){
 	else if(mode=='j') format_justified(par,width);
 }
 int main(){
+	int b;
 	//while(1){
-		printf("%s", get_next_paragraph());
+	//	printf("%s", get_next_paragraph());
 	//}
-
-//	printf("%s ", get_next_word());
-//	printf("%s ", get_next_word());
-//	printf("%s ", get_next_word());
+/*	int i=0;
+	while(i<100){
+		printf("%s ", get_next_word());
+		i++;
+	}*/
+	printf("%s", get_next_line());
+	b=is_empty_line();
+	printf("%s", get_next_line());
+	b=is_empty_line();
+	printf("%s", get_next_line());
+	b=is_empty_line();
+	printf("%s", get_next_line());
 }
+
