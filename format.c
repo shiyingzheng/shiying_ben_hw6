@@ -27,8 +27,31 @@ int is_empty_line(){
 	}
 	return EOF;
 }
+
+/*
+ * gets the next word in the line
+ */
+char* get_next_word(){
+	int c;
+	int position=0;
+	char* buffer;
+	char* word;
+	if((buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
+	while((c=getchar())!=EOF && c!='\n' && c!=' '){
+		buffer[position]=c;
+		++position;
+	}
+	buffer[position]=0;
+	if((word=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
+        strcpy(word, buffer);
+        free(buffer);
+        return word;
+}
 /*
  * gets the next line
+ * ignores whitespaces in each line
+ * returns a character array with words in the line and 
+ * whitespace characters to signal word boundries
  */
 char* get_next_line(){
 	int c;
@@ -36,6 +59,11 @@ char* get_next_line(){
 	char* buffer;
 	if((buffer=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
         char* string;
+	//TODO rewrite!
+	//1.ask get_next_word for the next word and add to the current
+	//  buffer. put spaces between words and at end of line 
+	//2.handle weird spacing including more than one space between
+	//  words and space between the last word and the end of line.
 	while((c=getchar())!=EOF){
                 if(c=='\n'){
 			buffer[position++]=' ';
@@ -82,14 +110,6 @@ char* get_next_paragraph(){
 	return paragraph;
 }
 /*
- * returns a pointer to the next word
- */
-char* next_word(char* c){
-	char* word;
-        //TODO not implemented yet
-        return word;
-}
-/*
  * format one paragraph left aligned
  */
 char* format_left_align(char* par, int width){
@@ -115,7 +135,8 @@ char* format_justified(char* par, int width){
 }
 
 /*
- * format one paragraph in the correct mode
+ * format one paragraph in the correct mode, assuming words are 
+ * seperated by spaces
  */
 char* format_paragraph(char* par,char mode, int width){
         char* c;
