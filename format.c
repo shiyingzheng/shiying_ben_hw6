@@ -113,7 +113,10 @@ void format_left_align(char* par, int width){
 	char exit=0;//tells the loop when to exit
 	char* word=par;//this pointer is inside paragraph, and is moved every time we reach a new word
 	char* word_buffer;//holds a word before we figure out how long it is.
+	char* line_buffer;//holds a line before printing
 	if((word_buffer=malloc(BUFFER_SIZE*sizeof(char)))==NULL) fprintf(stderr,"Out of memory");
+	if((line_buffer=malloc(width+1*sizeof(char)))==NULL) fprintf(stderr,"Out of memory");
+	line_buffer[0]=0;
 	int line_position=0;//tells us how many characters we have already put in our line
 	int position=0;//the position inside word. If position is 0 we are at the beginning of a new word.
 	//gets reset to 0 every time we hit a space
@@ -124,21 +127,26 @@ void format_left_align(char* par, int width){
 		if(word[position]==' '||word[position]==0){//word is finished
 			word_buffer[bufpos]=0;//make word_buffer a string
 			if(line_position+position>width){
-				printf("%c",'\n');//if the next word would overflow the line, print a newline
+				strcat(line_buffer,"\n");//if the next word would overflow the line, put a newline on
+				printf("%s",line_buffer);
 				line_position=0;
+				line_buffer[0]=0;
 			}
 			else if (!start_of_par) {
-				printf(" ");
+				strcat(line_buffer," ");
 				line_position++;
 			}
-			printf("%s",word_buffer);//print the word. It has either a space or a null char at the end.
+			strcat(line_buffer,word_buffer);//put the word onto line_buffer. It has either a space or a null char at the end.
 			line_position+=position;
 			if(word[position]==' '){
 				word+=position+1;//make word be the next word in the paragraph
 				position=0;//reset position
 				bufpos=0;
 			}
-			else exit=1;//because we will have hit the end of paragraph
+			else{
+				exit=1;//because we will have hit the end of paragraph
+				printf("%s\n",line_buffer);
+			}
 			start_of_par=0;
 		}
 		else {
@@ -176,6 +184,6 @@ void format_paragraph(char* par,char mode, int width){
 int main(){
 	char* meow=get_next_paragraph();
 //	printf("%s", meow);
-	format_paragraph(meow,'l',40);
+	format_paragraph(meow,'l',50);
 }
 
