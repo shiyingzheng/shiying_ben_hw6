@@ -81,50 +81,6 @@ char* get_next_line(){
 	free(buffer);
 	return line;
 }
-/*char* get_next_line(){
-	int c;
-	int h;
-	int position=0;
-	char* buffer;
-        char* string;
-	char* current_word;
-	if((current_word=(char*)malloc((BUFFER_SIZE+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
-	//TODO rewrite!
-	//1.ask get_next_word for the next word and add to the current
-	//  buffer. put spaces between words and at end of line 
-	//2.handle weird spacing including more than one space between
-	//  words and space between the last word and the end of line.
-	while((c=getchar())!=EOF){
-                if(c=='\n'){
-			buffer[position++]=' ';
-			buffer[position]=0;
-			if((string=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
-			strcpy(string, buffer);
-			free(buffer);
-//			free(current_word);
-			return string;
-		}
-		else if ((h=getchar()!=' ')){
-			ungetc(h, stdin);
-			current_word=get_next_word();
-			while (*current_word!=0){
-				buffer[position]=*current_word;
-				current_word++;
-				position++;
-			}
-			buffer[position]=' ';
-//			printf("meow");
-//			free(current_word);
-		}
-		++position;
-        }
-        buffer[position]=0;
-	if((string=(char*)malloc((position+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
-        strcpy(string, buffer);
-        free(buffer);
-//	free(current_word);
-        return string;
-}*/
 /*
  * Reads input from standard input and returns the next paragraph
  */
@@ -136,13 +92,12 @@ char* get_next_paragraph(){
 	int h;
 	char* line;
 	if ((c=(char *)malloc(sizeof(char)*PARAGRAPH_SIZE))==NULL) fprintf(stderr, "out of memory");
+	c[0]=0;
 	while ((b=is_empty_line())!=EOF&&!b){
 		line=get_next_line();
-		while (*line!=0){
-	      		c[position]=*line;
-			line++;
-			position++;
-		}
+		strcat(c,line);
+		position+=strlen(line);
+		free(line);
 	}
 	c[position]=0;
 	if((paragraph=(char*)malloc(sizeof(char)*(position+1)))==NULL)  fprintf(stderr, "out of memory");
@@ -166,10 +121,14 @@ void format_left_align(char* par, int width){
 		word_buffer[position]=word[position];
 		if(word[position]==' '||word[position]==0){//word is finished
 			word_buffer[position+1]=0;//make word_buffer a string
-			if(line_position+position>width) printf("%c",'\n');//if the next word would overflow the line, print a newline
+			if(line_position+position>width){
+				printf("%c",'\n');//if the next word would overflow the line, print a newline
+				line_position=0;
+			}
 			printf("%s",word_buffer);//print the word. It has either a space or a null char at the end.
+			line_position+=position;
 			if(word[position]==' '){
-				word+=position+1;//make word be the next word in the paragraph
+				word+=position;//make word be the next word in the paragraph
 				position=0;//reset position
 			}
 			else exit=1;//because we will have hit the end of paragraph
@@ -202,21 +161,8 @@ void format_paragraph(char* par,char mode, int width){
 	else if(mode=='j') format_justified(par,width);
 }
 int main(){
-	int b;
-	//while(1){
-	//	printf("%s", get_next_paragraph());
-	//}
-/*	int i=0;
-	while(i<100){
-		printf("%s ", get_next_word());
-		i++;
-	}*/
-	printf("%s", get_next_line());
-	b=is_empty_line();
-	printf("%s", get_next_line());
-	b=is_empty_line();
-	printf("%s", get_next_line());
-	b=is_empty_line();
-	printf("%s", get_next_line());
+	char* meow=get_next_paragraph();
+	printf("%s", meow);
+	format_paragraph(meow,'l',40);
 }
 
