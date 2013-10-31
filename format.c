@@ -117,23 +117,36 @@ void format_left_align(char* par, int width){
 	int line_position=0;//tells us how many characters we have already put in our line
 	int position=0;//the position inside word. If position is 0 we are at the beginning of a new word.
 	//gets reset to 0 every time we hit a space
+	int bufpos=0;
+	int start_of_par=1;
 	while(!exit){
-		word_buffer[position]=word[position];
+		word_buffer[bufpos]=word[position];
 		if(word[position]==' '||word[position]==0){//word is finished
-			word_buffer[position+1]=0;//make word_buffer a string
+			word_buffer[bufpos]=0;//make word_buffer a string
 			if(line_position+position>width){
 				printf("%c",'\n');//if the next word would overflow the line, print a newline
 				line_position=0;
 			}
+			else if (!start_of_par) {
+				printf(" ");
+				line_position++;
+			}
 			printf("%s",word_buffer);//print the word. It has either a space or a null char at the end.
 			line_position+=position;
 			if(word[position]==' '){
-				word+=position;//make word be the next word in the paragraph
+				word+=position+1;//make word be the next word in the paragraph
 				position=0;//reset position
+				bufpos=0;
 			}
 			else exit=1;//because we will have hit the end of paragraph
+			start_of_par=0;
 		}
-		++position;
+		else {
+//			printf("meow");
+			++bufpos;
+			++position;
+//			printf("position is %d\n", position);
+		}
 	}
 	free(word_buffer);
 }
@@ -162,7 +175,7 @@ void format_paragraph(char* par,char mode, int width){
 }
 int main(){
 	char* meow=get_next_paragraph();
-	printf("%s", meow);
+//	printf("%s", meow);
 	format_paragraph(meow,'l',40);
 }
 
