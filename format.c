@@ -76,7 +76,7 @@ char* get_next_line(){
 		free(word);
 		word=get_next_word();
 	}
-	if((line=(char*)malloc((strlen(buffer))*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
+	if((line=(char*)malloc((strlen(buffer)+1)*sizeof(char)))==NULL) fprintf(stderr,"out of memory");
 	strcpy(line,buffer);
 	free(buffer);
 	return line;
@@ -89,7 +89,6 @@ char* get_next_paragraph(){
 	int position=0;
 	char *paragraph;
 	int b;
-	int h;
 	char* line;
 	if ((c=(char *)malloc(sizeof(char)*PARAGRAPH_SIZE))==NULL) fprintf(stderr, "out of memory");
 	c[0]=0;
@@ -126,11 +125,13 @@ void format_left_align(char* par, int width){
 		word_buffer[bufpos]=word[position];
 		if(word[position]==' '||word[position]==0){//word is finished
 			word_buffer[bufpos]=0;//make word_buffer a string
-			if(line_position+position>width){
-				strcat(line_buffer,"\n");//if the next word would overflow the line, put a newline on
-				printf("%s",line_buffer);
-				line_position=0;
-				line_buffer[0]=0;
+			if(line_position+position>=width){
+				if (!start_of_par){
+				        strcat(line_buffer,"\n");//if the next word would overflow the line, put a newline on
+					printf("%s",line_buffer);
+					line_position=0;
+					line_buffer[0]=0;
+			        }
 			}
 			else if (!start_of_par) {
 				strcat(line_buffer," ");
@@ -155,7 +156,7 @@ void format_left_align(char* par, int width){
 			++position;
 		}
 	}
-	free(line_buffer);
+	free(line_buffer); 
 	free(word_buffer);
 }
 /*
@@ -167,7 +168,7 @@ char exit=0;//tells the loop when to exit
         char* word_buffer;//holds a word before we figure out how long it is.
         char* line_buffer;//holds a line before printing
         if((word_buffer=malloc(BUFFER_SIZE*sizeof(char)))==NULL) fprintf(stderr,"Out of memory");
-        if((line_buffer=malloc(width+2*sizeof(char)))==NULL) fprintf(stderr,"Out of memory");
+        if((line_buffer=malloc(BUFFER_SIZE*sizeof(char)))==NULL) fprintf(stderr,"Out of memory");
         line_buffer[0]=0;
         int line_position=0;//tells us how many characters we have already put in our line
         int position=0;//the position inside word. If position is 0 we are at the beginning of a new word.
@@ -178,14 +179,16 @@ char exit=0;//tells the loop when to exit
                 word_buffer[bufpos]=word[position];
                 if(word[position]==' '||word[position]==0){//word is finished
                         word_buffer[bufpos]=0;//make word_buffer a string
-                        if(line_position+position>width){
-                                strcat(line_buffer,"\n");//if the next word would overflow the line, put a newline on
-                                for(int i=0;i<width-line_position;++i){
-					printf(" ");
+                        if(line_position+position>=width){
+				if(!start_of_par){
+		                        strcat(line_buffer,"\n");//if the next word would overflow the line, put a newline on
+        		                for(int i=0;i<width-line_position;++i){
+					       printf(" ");
+					}
+        		                printf("%s",line_buffer);
+        		                line_position=0;
+        		                line_buffer[0]=0;
 				}
-                                printf("%s",line_buffer);
-                                line_position=0;
-                                line_buffer[0]=0;
                         }
                         else if (!start_of_par) {
                                 strcat(line_buffer," ");
@@ -200,7 +203,7 @@ char exit=0;//tells the loop when to exit
                         }
                         else{
                                 exit=1;//because we will have hit the end of paragraph
-                                line_buffer[line_position-1]='\n';
+                                //line_buffer[line_position-1]='\n';//invalid write of size 1
 				for(int i=0;i<width-line_position+1;++i){
                                         printf(" ");
                                 }
@@ -215,7 +218,7 @@ char exit=0;//tells the loop when to exit
         }
         free(line_buffer);
         free(word_buffer);
-
+	free(par);
 }
 /*
  * print one formatted paragraph justified.
@@ -237,6 +240,6 @@ void format_paragraph(char* par,char mode, int width){
 int main(){
 	char* meow=get_next_paragraph();
 //	printf("%s", meow);
-	format_paragraph(meow,'r',40);
+	format_paragraph(meow,'r',14); //14 is the length of the longest word in the first paragraph and if line width goes under 15, we get double freeing error
 }
 
