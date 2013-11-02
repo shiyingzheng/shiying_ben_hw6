@@ -115,6 +115,68 @@ void format_left_align(int width){
  * right justify input
  */
 void format_right_align(int width){
+	int b=0;
+        char* word;
+        char buffer[BUFFER_SIZE];
+        buffer[0]=0;
+        int position=0;
+	int cur=0;
+        while(!eof){
+                word=get_next_word();
+                if(!strcmp(word,"\n")){
+                        while((b=is_empty_line())&&b!=EOF){
+                                word=get_next_word();
+                                strcat(buffer,word);
+				while(cur<width-position && width>position){
+					printf(" ");
+					cur++;
+				}
+				cur=0;
+                                printf("%s\n",buffer);
+                                position=0;
+                                buffer[0]=0;
+                        }
+                }
+                else{
+                        if(position+strlen(word)<width){
+                                if(position){
+                                        strcat(buffer," ");
+                                        position++;
+                                }
+                                strcat(buffer,word);
+                                position+=strlen(word);
+                        }
+                        else if(position!=0){
+				while(cur<width-position && width>position){
+					printf(" ");
+					cur++;
+				}
+				cur=0;
+                                printf("%s\n",buffer);
+                                position=0;
+                                buffer[0]=0;
+                                strcat(buffer,word);
+                                position+=strlen(word);
+                                free(word);
+                        }
+                        else{
+				while(cur<width-strlen(word) && width>strlen(word)){
+					printf(" ");
+					cur++;
+				}
+				cur=0;
+                                printf("%s\n",word);
+                                free(word);
+                        }
+                }
+        }
+	while(cur<width-position && width>position){
+		printf(" ");
+		cur++;
+	}
+        printf("%s",buffer);
+        if(b==EOF) printf("\n");
+
 }
 /*
  * fully justify input
@@ -134,6 +196,6 @@ void format(char mode, int width){
 	else if(mode=='j') format_justified(width);
 }
 int main(){
-	format('l',40); 
+	format('l',72); 
 }
 
