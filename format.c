@@ -45,6 +45,7 @@ char* get_next_word(){
 		++position;
 	}
 	if(c=='\n'&&position==0){
+		free(buffer);
                 return "\n";
         }
 	while(c==' '){
@@ -158,6 +159,7 @@ void format_left_align(char* par, int width){
 	}
 	free(line_buffer); 
 	free(word_buffer);
+	free(par);
 }
 /*
  * print one paragraph formatted right aligned
