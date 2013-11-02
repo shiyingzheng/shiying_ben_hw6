@@ -120,14 +120,17 @@ void Qformat_left(int width){
 	while(!eof){
 		word=get_next_word();
 		if(!strcmp(word,"\n")){
-			if(is_empty_line){
-				//printf("\n");
+			if(is_empty_line()){
+				printf("\n");
 			}
 		}
 		else{
+//			printf("%s\n",word);
 			if(position+strlen(word)<width-1){
-				strcat(buffer," ");
-				position++;
+				if(position){
+					strcat(buffer," ");
+					position++;
+				}
 				strcat(buffer,word);
 				position+=strlen(word);
 			}
