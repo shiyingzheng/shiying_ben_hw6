@@ -121,10 +121,16 @@ void Qformat_left(int width){
 	while(!eof){
 		word=get_next_word();
 		if(!strcmp(word,"\n")){
-			while((b=is_empty_line())&&b!=EOF){
+			if((b=is_empty_line())&&b!=EOF){
 				word=get_next_word();
 				strcat(buffer,word);
 				printf("%s\n",buffer);
+				buffer[0]=0;
+			}
+			while((b=is_empty_line())&&b!=EOF){
+				word=get_next_word();
+				strcat(buffer,word);
+				printf("%s",buffer);
 				position=0;
 				buffer[0]=0;
 			}
