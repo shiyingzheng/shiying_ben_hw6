@@ -113,15 +113,18 @@ char* get_next_paragraph(){
 	return paragraph;
 }
 void Qformat_left(int width){
+	int b=0;
 	char* word;
 	char buffer[BUFFER_SIZE];
 	buffer[0]=0;
-	int position;
+	int position=0;
 	while(!eof){
 		word=get_next_word();
 		if(!strcmp(word,"\n")){
-			if(is_empty_line()){
-				printf("%s\n\n",buffer);
+			while((b=is_empty_line())&&b!=EOF){
+				word=get_next_word();
+				strcat(buffer,word);
+				printf("%s\n",buffer);
 				position=0;
 				buffer[0]=0;
 			}
@@ -147,6 +150,7 @@ void Qformat_left(int width){
 		}
 	}
 	printf("%s",buffer);
+	if(b==EOF) printf("\n");
 }
 /*
  * print one paragraph formatted left aligned
