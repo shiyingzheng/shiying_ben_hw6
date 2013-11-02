@@ -121,12 +121,14 @@ void Qformat_left(int width){
 		word=get_next_word();
 		if(!strcmp(word,"\n")){
 			if(is_empty_line()){
-				printf("\n");
+				printf("%s\n\n",buffer);
+				position=0;
+				buffer[0]=0;
 			}
 		}
 		else{
 //			printf("%s\n",word);
-			if(position+strlen(word)<width-1){
+			if(position+strlen(word)<width){
 				if(position){
 					strcat(buffer," ");
 					position++;
@@ -283,6 +285,6 @@ int main(){
 //	char* meow=get_next_paragraph();
 //	printf("%s", meow);
 //	format_paragraph(meow,'r',14); //14 is the length of the longest word in the first paragraph and if line width goes under 15, we get double freeing error
-	Qformat_left(40);
+	Qformat_left(5);
 }
 
