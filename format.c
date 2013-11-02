@@ -146,7 +146,7 @@ void Qformat_left(int width){
 			}
 		}
 	}
-	printf("%s\n",buffer);
+	printf("%s",buffer);
 }
 /*
  * print one paragraph formatted left aligned
@@ -285,6 +285,6 @@ int main(){
 //	char* meow=get_next_paragraph();
 //	printf("%s", meow);
 //	format_paragraph(meow,'r',14); //14 is the length of the longest word in the first paragraph and if line width goes under 15, we get double freeing error
-	Qformat_left(5);
+	Qformat_left(40);
 }
 
