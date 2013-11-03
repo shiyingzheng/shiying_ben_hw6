@@ -249,6 +249,7 @@ void format_justified(int width){
 	int position=0;
 	char* word;
 	int b;
+	line_buffer[0]=0;
 	while(!eof){
 		word=get_next_word();
 		if(!strcmp(word,"\n")){
@@ -275,12 +276,6 @@ void format_justified(int width){
                                 position+=strlen(word);
                                 free(word);
                         }
-
-/*			if(position+strlen(word)<width){
-				strcat(line_buffer,word);
-				position+=strlen(word);
-				free(word);
-			}*/
 			else{
 				print_fjustified(line_buffer, width);
 				line_buffer[0]=0;
@@ -291,7 +286,7 @@ void format_justified(int width){
 		}
 	}
 	print_fjustified(line_buffer, width);
-//	printf("\n");
+	free(line_buffer);
 }
 
 /*
