@@ -78,13 +78,18 @@ void format_left_align(int width){
         while(!eof){
                 word=get_next_word();
                 if(!strcmp(word,"\n")){
-                        while((b=is_empty_line())&&b!=EOF){
-                                word=get_next_word();
-                                strcat(buffer,word);
-                                printf("%s\n",buffer);
-                                position=0;
-                                buffer[0]=0;
-                        }
+			if (position!=0){
+                        	if((b=is_empty_line())&&b!=EOF){
+                                	word=get_next_word();
+                           	     	strcat(buffer,word);
+                                	printf("%s\n",buffer);
+                                	position=0;
+                                	buffer[0]=0;
+                        	}
+			}
+			else if (!merge_empty_lines) {
+				printf("\n");
+			}
                 }
                 else{
                         if(position+strlen(word)<width){
@@ -125,18 +130,23 @@ void format_right_align(int width){
         while(!eof){
                 word=get_next_word();
                 if(!strcmp(word,"\n")){
-                        while((b=is_empty_line())&&b!=EOF){
-                                word=get_next_word();
-                                strcat(buffer,word);
-				while(cur<width-position && width>position){
-					printf(" ");
-					cur++;
-				}
-				cur=0;
-                                printf("%s\n",buffer);
-                                position=0;
-                                buffer[0]=0;
-                        }
+                        if(position!=0){
+				if((b=is_empty_line())&&b!=EOF){
+                                	word=get_next_word();
+                                	strcat(buffer,word);
+					while(cur<width-position && width>position){
+						printf(" ");
+						cur++;
+					}
+					cur=0;
+                                	printf("%s\n",buffer);
+                                	position=0;
+                                	buffer[0]=0;
+                        	}
+			}
+			else if (!merge_empty_lines){
+				printf("\n");
+			}
                 }
                 else{
                         if(position+strlen(word)<width){
@@ -242,13 +252,18 @@ void format_justified(int width){
 	while(!eof){
 		word=get_next_word();
 		if(!strcmp(word,"\n")){
-			while((b=is_empty_line())&&b!=EOF){
-                                word=get_next_word();
-                                print_fjustified(line_buffer, width);
+			if (position!=0){
+				if((b=is_empty_line())&&b!=EOF){
+                                	word=get_next_word();
+                                	print_fjustified(line_buffer, width);
+					printf("\n");
+                                	position=0;
+                                	line_buffer[0]=0;
+                        	}
+			}
+			else if (!merge_empty_lines){
 				printf("\n");
-                                position=0;
-                                line_buffer[0]=0;
-                        }
+			}
 		}
 		else{
 			if(position+strlen(word)<width){
