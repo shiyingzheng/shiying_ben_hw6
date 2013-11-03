@@ -1,0 +1,29 @@
+.\" Man page for the program format, hw6 of CSCI 241
+.\" Shiying Zheng and Ben Stern - Fall 2013
+
+.TH FORMAT 1 "02 November 2013" "CSCI 241" "Oberlin College"
+
+.SH NAME
+.B format
+\- reformat text from standard input
+
+.SH SYNOPSIS
+.B format
+[ -w linewidth ] [ -j ] [ -r ] [ -s ] 
+
+.SH DESCRIPTION
+.B format
+formats the text from standard input with any given arguments. If -r and -j are both given, the program uses the last one specified. Default is left justify, line width 72 characters, and no blank line merging.
+
+.SH OPTIONS
+.IP "-w linewidth, specifies the width of each line, i.e. the number of characters on each line"
+.IP "-s, merge all blank lines into one"
+.IP "-r, right justify text"
+.IP "-j, fully justify text"
+
+.SH AUTHOR
+Shiying Zheng(Fall 2013)
+Benjamin Stern(Fall 2013)
+
+.SH BUGS
+None!
