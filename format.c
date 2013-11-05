@@ -326,6 +326,10 @@ int main(int argc, char *argv[]){
 		else if (!strcmp(argv[i],"-s")){
 			merge_empty_lines=1;
 		}
+		else if (!strcmp(argv[i],"-h") || (!strcmp(argv[i],"-?"))){
+			error=1;
+			break;
+		}
 		else{
 			printf("Unknown flag %s\n\n", argv[i]);
 			error=1;
